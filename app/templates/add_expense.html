@@ -2,9 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Add Expense</title>
 </head>
 <body>
+<form>
+    <div class="form-group" action="">
+        <label for="amount">Amount</label>
+        <input type="number" class="form-control" id="amount" placeholder="Enter Amount">
 
+        <label for="description">Description</label>
+        <input type="text" class="form-control" id="description" placeholder="Enter Description">
+
+        <label for="category">Category</label>
+        <select id="category" name="category">
+          <option value="category">Category Name</option>
+        </select>
+
+        <label for="expense_date">Expense Date</label>
+        <input type="date" class="form-control" id="expense_date">
+
+        <input type="submit" value="Submit">
+    </div>
+</form>
 </body>
 </html>
