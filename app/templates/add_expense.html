@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add Expense</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block header %}
+    <h1>{% block title %}Add Expense{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
 <form>
     <div class="form-group" action="">
         <label for="amount">Amount</label>
@@ -24,5 +23,4 @@
         <input type="submit" value="Submit">
     </div>
 </form>
-</body>
-</html>
+{% endblock %}
