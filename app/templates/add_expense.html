@@ -4,23 +4,30 @@
 {% endblock %}
 
 {% block content %}
-<form>
-    <div class="form-group" action="">
+<form method="POST" action="">
+    <div class="form-group">
         <label for="amount">Amount</label>
-        <input type="number" class="form-control" id="amount" placeholder="Enter Amount">
+        <input type="number" step="0.01" class="form-control" id="amount" name="amount" placeholder="Enter Amount" required>
 
         <label for="description">Description</label>
-        <input type="text" class="form-control" id="description" placeholder="Enter Description">
+        <input type="text" class="form-control" id="description" name="description" placeholder="Enter Description" required>
 
         <label for="category">Category</label>
-        <select id="category" name="category">
-          <option value="category">Category Name</option>
+        <select id="category" name="category" class="form-control" required>
+          <option value="">Select Category</option>
+          <option value="food">Food</option>
+          <option value="transportation">Transportation</option>
+          <option value="entertainment">Entertainment</option>
+          <option value="utilities">Utilities</option>
+          <option value="healthcare">Healthcare</option>
+          <option value="shopping">Shopping</option>
+          <option value="other">Other</option>
         </select>
 
         <label for="expense_date">Expense Date</label>
-        <input type="date" class="form-control" id="expense_date">
+        <input type="date" class="form-control" id="expense_date" name="expense_date" required>
 
-        <input type="submit" value="Submit">
+        <input type="submit" value="Add Expense">
     </div>
 </form>
 {% endblock %}
