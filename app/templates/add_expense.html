@@ -1,38 +1,3 @@
-{#{% extends 'base.html' %}#}
-{#{% block header %}#}
-{#    <h1>{% block title %}Add Expense{% endblock %}</h1>#}
-{#{% endblock %}#}
-{##}
-{#{% block content %}#}
-{#<form method="POST" action="">#}
-{#    <div class="form-group">#}
-{#        <label for="amount">Amount</label>#}
-{#        <input type="number" step="0.01" class="form-control" id="amount" name="amount" placeholder="Enter Amount" required>#}
-{##}
-{#        <label for="description">Description</label>#}
-{#        <input type="text" class="form-control" id="description" name="description" placeholder="Enter Description" required>#}
-{##}
-{#        <label for="category">Category</label>#}
-{#        <select id="category" name="category" class="form-control" required>#}
-{#          <option value="">Select Category</option>#}
-{#          <option value="food">Food</option>#}
-{#          <option value="transportation">Transportation</option>#}
-{#          <option value="entertainment">Entertainment</option>#}
-{#          <option value="utilities">Utilities</option>#}
-{#          <option value="healthcare">Healthcare</option>#}
-{#          <option value="shopping">Shopping</option>#}
-{#          <option value="other">Other</option>#}
-{#        </select>#}
-{##}
-{#        <label for="expense_date">Expense Date</label>#}
-{#        <input type="date" class="form-control" id="expense_date" name="expense_date" required>#}
-{##}
-{#        <input type="submit" value="Add Expense">#}
-{#    </div>#}
-{#</form>#}
-{#{% endblock %}#}
-
-
 {% extends 'base.html' %}
 {% block header %}
     <h1>{% block title %}Add New Expense{% endblock %}</h1>
@@ -52,7 +17,7 @@
         <label for="category">Category</label>
         <select id="category" name="category" class="form-control" required>
             <option value="">Select a category</option>
-            <option value="Food">🍕 Food & Dining</option>
+            <option value="Food">🍕 Food</option>
             <option value="Transportation">🚗 Transportation</option>
             <option value="Entertainment">🎬 Entertainment</option>
             <option value="Utilities">⚡ Utilities</option>

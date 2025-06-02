@@ -47,8 +47,6 @@ def add_expense():
         if not expense_date:
             errors.append("Please select an expense date")
 
-        print("got here")
-
         if errors:
             for error in errors:
                 flash(error)
@@ -74,7 +72,19 @@ def add_expense():
 
 @app.route('/reports')
 def reports():
-    return render_template('reports.html')
+    data = db.get_db()
+    error = None
+    expenses = None
+
+    if error is None:
+        try:
+            expenses = data.execute("SELECT * FROM expenses, categories WHERE category_id=categories.id").fetchall()
+            categories = data.execute("SELECT * FROM categories").fetchall()
+        except:
+            error = "Database error"
+
+    flash(error)
+    return render_template('reports.html', expenses=expenses, categories=categories)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
