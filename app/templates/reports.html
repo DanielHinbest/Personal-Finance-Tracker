@@ -1,33 +1,70 @@
 {% extends 'base.html' %}
 {% block header %}
-    <h1>{% block title %}Reports{% endblock %}</h1>
+    <h1>{% block title %}Expense Reports{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
 <div class="reports-container">
-    <!-- Search and Filter Section -->
+    <!-- Reports Header with Date Range -->
+    <div class="reports-header">
+        <div class="date-range-picker">
+            <div class="date-input-group">
+                <label for="start-date">From</label>
+                <input type="date" id="start-date" name="start-date">
+            </div>
+            <div class="date-input-group">
+                <label for="end-date">To</label>
+                <input type="date" id="end-date" name="end-date">
+            </div>
+            <button class="btn-search">Update Report</button>
+        </div>
+    </div>
+
+    <!-- Total Summary -->
+    {% if total_amount %}
+    <div class="total-summary">
+        <h3>Total Expenses</h3>
+        <p class="total-amount">${{ "%.2f"|format(total_amount) }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Category Breakdown -->
+    {% if category_totals %}
+    <div class="category-breakdown">
+        {% for category, amount in category_totals.items() %}
+        <div class="category-card">
+            <h4>{{ category.title() }}</h4>
+            <p class="category-amount">${{ "%.2f"|format(amount) }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Search and Filter -->
     <div class="search-filter-container">
         <div class="search-group">
-            <label for="search">Search</label>
-            <input type="text" class="form-control" id="search" placeholder="Search expenses...">
+            <label for="search">Search Expenses</label>
+            <input type="text" class="form-control" id="search" placeholder="Search by description...">
         </div>
         <div class="filter-group">
-            <label for="category-filter">Category</label>
+            <label for="category-filter">Filter by Category</label>
             <select id="category-filter" class="form-control">
                 <option value="">All Categories</option>
-                <option value="food">Food</option>
+                <option value="food">Food & Dining</option>
                 <option value="transportation">Transportation</option>
                 <option value="entertainment">Entertainment</option>
                 <option value="utilities">Utilities</option>
                 <option value="healthcare">Healthcare</option>
                 <option value="shopping">Shopping</option>
+                <option value="education">Education</option>
+                <option value="travel">Travel</option>
                 <option value="other">Other</option>
             </select>
         </div>
-        <button class="btn-search">Filter</button>
+        <button class="btn-search">Apply Filter</button>
     </div>
 
-    <!-- Table Section -->
+    <!-- Expenses Table -->
     <div class="table-container">
         <table>
             <thead>
@@ -39,23 +76,31 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Example rows - replace with Flask loop -->
                 {% if expenses %}
                     {% for expense in expenses %}
                     <tr>
                         <td>{{ expense.date.strftime('%Y-%m-%d') if expense.date else 'N/A' }}</td>
                         <td>{{ expense.description }}</td>
-                        <td><span class="category-badge">{{ expense.category }}</span></td>
+                        <td><span class="category-badge">{{ expense.category.title() }}</span></td>
                         <td class="amount-negative">${{ "%.2f"|format(expense.amount) }}</td>
                     </tr>
                     {% endfor %}
                 {% else %}
                     <tr>
-                        <td colspan="4" class="text-center text-muted">No expenses found</td>
+                        <td colspan="4" class="text-center text-muted">
+                            No expenses found for the selected criteria
+                        </td>
                     </tr>
                 {% endif %}
             </tbody>
         </table>
+    </div>
+
+    <!-- Back to Home Link -->
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="{{ url_for('index') }}" style="color: #666; text-decoration: none;">
+            ← Back to Dashboard
+        </a>
     </div>
 </div>
 {% endblock %}

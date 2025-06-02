@@ -1,8 +1,65 @@
+<!-- Updated index.html - Home page with expense list -->
 {% extends 'base.html' %}
 {% block header %}
-    <h1>{% block title %}Home{% endblock %}</h1>
+    <h1>{% block title %}Personal Finance Dashboard{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-<p>This is the future home page</p>
+<div class="expense-list-container">
+    <!-- Summary Cards -->
+    <div class="expense-summary">
+        <div class="summary-card">
+            <h3>This Month</h3>
+            <p class="amount">${{ monthly_total or "0.00" }}</p>
+        </div>
+        <div class="summary-card">
+            <h3>This Week</h3>
+            <p class="amount">${{ weekly_total or "0.00" }}</p>
+        </div>
+        <div class="summary-card">
+            <h3>Total Expenses</h3>
+            <p class="amount">${{ total_expenses or "0.00" }}</p>
+        </div>
+    </div>
+
+    <!-- Add Expense Button -->
+    <a href="{{ url_for('add_expense') }}" class="add-expense-btn">
+        ➕ Add New Expense
+    </a>
+
+    <!-- Recent Expenses List -->
+    <div class="recent-expenses">
+        <h2 style="margin-bottom: 1.5rem; color: #333;">Recent Expenses</h2>
+
+        {% if expenses %}
+            {% for expense in expenses %}
+            <div class="expense-item">
+                <div class="expense-details">
+                    <h4>{{ expense.description }}</h4>
+                    <div class="expense-meta">
+                        <span class="category-badge">{{ expense.category }}</span>
+                        <span>{{ expense.date.strftime('%Y-%m-%d') if expense.date else 'No date' }}</span>
+                    </div>
+                </div>
+                <div class="expense-amount">
+                    -${{ "%.2f"|format(expense.amount) }}
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- View All Link -->
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="{{ url_for('reports') }}" style="color: #4facfe; text-decoration: none; font-weight: 600;">
+                    View All Expenses & Reports →
+                </a>
+            </div>
+        {% else %}
+            <div class="no-expenses">
+                <div class="no-expenses-icon">💸</div>
+                <h3>No expenses yet</h3>
+                <p>Start tracking your finances by adding your first expense!</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}
