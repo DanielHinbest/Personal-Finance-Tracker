@@ -14,4 +14,4 @@ CREATE TABLE expenses (
 );
 
 INSERT INTO categories VALUES (1, 'test');
-INSERT INTO expenses (id, amount, description, category_id, expense_date) VALUES (1, 5.99, 'test', 1, '2025-05-27');
+INSERT INTO expenses (id, amount, description, category_id, expense_date) VALUES (1, 5.99, 'test', 1, '2025-06-01');

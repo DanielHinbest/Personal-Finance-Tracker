@@ -1,17 +1,32 @@
-from flask import Flask, render_template, request
+import os
+
+from flask import Flask, render_template, request, flash
+import app.database as db
 
 app = Flask(__name__)
+app.secret_key = 'my-portfolio-secret-key'
+app.config['DATABASE'] = os.path.abspath(os.path.join(app.root_path, '..', 'data', 'data.sqlite'))
+db.init_app(app)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    data = db.get_db()
+    error = None
+    expenses = None
+
+    if error is None:
+        try:
+            expenses = data.execute("SELECT * FROM expenses").fetchall()
+        except:
+            error = "Database error"
+
+    flash(error)
+
+    return render_template('index.html', expenses=expenses)
 
 @app.route('/add_expense', methods=['GET', 'POST'])
 def add_expense():
-    if request.method == 'GET':
-        return render_template('add_expense.html')
-    elif request.method == 'POST':
-        return render_template('add_expense.html', expense=request.form['expense'])
+    return render_template('add_expense.html')
 
 @app.route('/reports')
 def reports():

@@ -38,7 +38,7 @@
                     <h4>{{ expense.description }}</h4>
                     <div class="expense-meta">
                         <span class="category-badge">{{ expense.category }}</span>
-                        <span>{{ expense.date.strftime('%Y-%m-%d') if expense.date else 'No date' }}</span>
+                        <span>{{ expense.expense_date.strftime('%Y-%m-%d') if expense.expense_date else 'No date' }}</span>
                     </div>
                 </div>
                 <div class="expense-amount">
