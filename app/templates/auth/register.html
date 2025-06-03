@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% block header %}
+    <h1>{% block title %}Create Account{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<form method="POST" action="{{ url_for('auth.register') }}">
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" class="form-control" id="username" name="username"
+               placeholder="Choose a username" required maxlength="150" minlength="3"
+               value="{{ request.form.username if request.form.username }}">
+
+        <label for="email">Email Address</label>
+        <input type="email" class="form-control" id="email" name="email"
+               placeholder="Enter your email address" required maxlength="254"
+               value="{{ request.form.email if request.form.email }}">
+
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" name="password"
+               placeholder="Create a secure password" required minlength="6">
+
+        <label for="confirm_password">Confirm Password</label>
+        <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+               placeholder="Re-enter your password" required minlength="6">
+
+        <!-- Flash messages for errors -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Password requirements info -->
+        <div class="password-info">
+            <p>Password must be at least 6 characters long</p>
+        </div>
+
+        <input type="submit" value="🚀 Create Account">
+    </div>
+</form>
+
+<!-- Login Link -->
+<div class="auth-links">
+    <p>Already have an account?</p>
+    <a href="{{ url_for('auth.login') }}" class="auth-link">
+        Sign In →
+    </a>
+</div>
+
+<!-- Additional CSS for auth-specific styling -->
+<style>
+.flash-messages {
+    margin: 1rem 0;
+}
+
+.flash-message {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.flash-error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.flash-success {
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.flash-info {
+    background: rgba(79, 172, 254, 0.1);
+    color: #2563eb;
+    border: 1px solid rgba(79, 172, 254, 0.2);
+}
+
+.password-info {
+    margin: 0.5rem 0 1rem 0;
+    padding: 0.75rem;
+    background: rgba(79, 172, 254, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(79, 172, 254, 0.1);
+}
+
+.password-info p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #4f46e5;
+}
+
+.auth-links {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e1e5e9;
+}
+
+.auth-links p {
+    color: #666;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.auth-link {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    background: rgba(102, 126, 234, 0.05);
+    border: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+.auth-link:hover {
+    background: rgba(102, 126, 234, 0.1);
+    color: #5a67d8;
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+    .password-info {
+        padding: 0.625rem;
+        margin: 0.5rem 0 0.75rem 0;
+    }
+
+    .password-info p {
+        font-size: 0.85rem;
+    }
+
+    .auth-links {
+        padding-top: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .auth-link {
+        padding: 0.625rem 1.25rem;
+        font-size: 0.9rem;
+    }
+}
+</style>
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block header %}
+    <h1>{% block title %}Sign In{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<form method="POST" action="{{ url_for('auth.login') }}">
+    <div class="form-group">
+        <label for="username">Username or Email</label>
+        <input type="text" class="form-control" id="username" name="username"
+               placeholder="Enter your username or email" required maxlength="150"
+               value="{{ request.form.username if request.form.username }}">
+
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" name="password"
+               placeholder="Enter your password" required>
+
+        <!-- Flash messages for errors -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <input type="submit" value="🔑 Sign In">
+    </div>
+</form>
+
+<!-- Register Link -->
+<div class="auth-links">
+    <p>Don't have an account?</p>
+    <a href="{{ url_for('auth.register') }}" class="auth-link">
+        Create Account →
+    </a>
+</div>
+
+<!-- Additional CSS for auth-specific styling -->
+<style>
+.flash-messages {
+    margin: 1rem 0;
+}
+
+.flash-message {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.flash-error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.flash-success {
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.flash-info {
+    background: rgba(79, 172, 254, 0.1);
+    color: #2563eb;
+    border: 1px solid rgba(79, 172, 254, 0.2);
+}
+
+.auth-links {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e1e5e9;
+}
+
+.auth-links p {
+    color: #666;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.auth-link {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    background: rgba(102, 126, 234, 0.05);
+    border: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+.auth-link:hover {
+    background: rgba(102, 126, 234, 0.1);
+    color: #5a67d8;
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+    .auth-links {
+        padding-top: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .auth-link {
+        padding: 0.625rem 1.25rem;
+        font-size: 0.9rem;
+    }
+}
+</style>
+{% endblock %}

@@ -9,7 +9,18 @@
 <body>
     <section class="content">
         <header>
-            {% block header %}{% endblock %}
+            <div class="header-content">
+                {% block header %}{% endblock %}
+            {% if session['user_id'] %}
+                <div class="header-actions">
+                    <form method="POST" action="{{ url_for('auth.logout') }}" class="logout-form">
+                        <button type="submit" class="logout-btn" title="Logout">
+                            🚪 Logout
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
+            </div>
         </header>
         <div class="main-content">
             {% block content %}{% endblock %}
