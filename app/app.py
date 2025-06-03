@@ -123,6 +123,8 @@ def reports():
 
     search_query = request.args.get('q', '').strip()
     selected_category = request.args.get('category', '').strip()
+    start_date = request.args.get('start_date', '').strip()
+    end_date = request.args.get('end_date', '').strip()
 
     if error is None:
         try:
@@ -144,6 +146,14 @@ def reports():
                 search_sql += "AND categories.name = ?"
                 params.append(selected_category)
 
+            if start_date:
+                search_sql += " AND expense_date >= ?"
+                params.append(start_date)
+
+            if end_date:
+                search_sql += " AND expense_date <= ?"
+                params.append(end_date)
+
             search_sql += " ORDER BY expense_date DESC"
 
             expenses = data.execute(search_sql, params).fetchall()
@@ -153,7 +163,7 @@ def reports():
             categories = []
 
     flash(error)
-    return render_template('reports.html', expenses=expenses, categories=categories, search_query=search_query, selected_category=selected_category)
+    return render_template('reports.html', expenses=expenses, categories=categories, search_query=search_query, selected_category=selected_category, start_date=start_date, end_date=end_date)
 
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0')

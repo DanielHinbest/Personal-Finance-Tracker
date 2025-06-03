@@ -5,8 +5,6 @@
 
 {% block content %}
 <div class="reports-container">
-
-
     <!-- Total Summary -->
     {% if total_amount %}
     <div class="total-summary">
@@ -27,37 +25,43 @@
     </div>
     {% endif %}
 
-    <!-- Search and Filter -->
+    <!-- Combined Search, Filter, and Date Range Form -->
     <div class="search-filter-container">
-        <!-- Reports Header with Date Range -->
-        <div class="reports-header">
-            <div class="date-range-picker">
-                <div class="date-input-group">
-                    <label for="start-date">From</label>
-                    <input type="date" id="start-date" name="start-date">
+        <form method="GET" action="{{ url_for('reports') }}" class="reports-form">
+            <div class="form-row">
+                <!-- Date Range Inputs -->
+                <div class="form-group date-group">
+                    <label for="start-date">From Date</label>
+                    <input type="date" id="start-date" name="start_date" class="form-control" value="{{ start_date or '' }}">
                 </div>
-                <div class="date-input-group">
-                    <label for="end-date">To</label>
-                    <input type="date" id="end-date" name="end-date">
+
+                <div class="form-group date-group">
+                    <label for="end-date">To Date</label>
+                    <input type="date" id="end-date" name="end_date" class="form-control" value="{{ end_date or '' }}">
                 </div>
-                <button class="btn-search">Update Report</button>
+
+                <!-- Search Input -->
+                <div class="form-group search-group">
+                    <label for="search">Search Expenses</label>
+                    <input type="text" class="form-control" name="q" id="search" value="{{ search_query or '' }}" placeholder="Search by description...">
+                </div>
+
+                <!-- Category Filter -->
+                <div class="form-group filter-group">
+                    <label for="category-filter">Filter by Category</label>
+                    <select id="category-filter" name="category" class="form-control">
+                        <option value="">All Categories</option>
+                        {% for cat in categories %}
+                            <option value="{{ cat.name }}" {% if selected_category == cat.name %}selected{% endif %}>{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-group button-group">
+                    <button type="submit" class="btn-search">Apply Filters</button>
+                </div>
             </div>
-        </div>
-        <form method="GET" action="{{ url_for('reports') }}">
-            <div class="search-group">
-                <label for="search">Search Expenses</label>
-                <input type="text" class="form-control" name="q" id="search" value="{{ search_query }}"placeholder="Search by description...">
-            </div>
-            <div class="filter-group">
-                <label for="category-filter">Filter by Category</label>
-                <select id="category-filter" name="category" class="form-control">
-                    <option value="">All Categories</option>
-                    {% for cat in categories %}
-                        <option value="{{ cat.name }}" {% if selected_category %}selected{% endif %}>{{ cat.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <button class="btn-search">Apply Filter</button>
         </form>
     </div>
 
@@ -98,8 +102,8 @@
     </div>
 
     <!-- Back to Home Link -->
-    <div style="text-align: center; margin-top: 2rem;">
-        <a href="{{ url_for('index') }}" style="color: #666; text-decoration: none;">
+    <div class="back-link-container">
+        <a href="{{ url_for('index') }}" class="back-link">
             ← Back to Dashboard
         </a>
     </div>
