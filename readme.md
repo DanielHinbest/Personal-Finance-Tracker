@@ -4,7 +4,7 @@ A containerized personal finance application built with Flask and Docker, featur
 
 ## 🚀 Live Demo
 
-[View Live Application](your-deployment-url-here) | [View Source Code](https://github.com/your-username/personal-finance-tracker)
+[View Live Application](your-deployment-url-here) | [View Source Code](https://github.com/DanielHinbest/Personal-Finance-Tracker)
 
 ## 📋 Project Overview
 
