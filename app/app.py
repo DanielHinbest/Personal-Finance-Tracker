@@ -59,7 +59,6 @@ def add_expense():
     except Exception as e:
         flash(f"Database error: {str(e)}", category="danger")
     if request.method == 'POST':
-        id = random.randint(10000, 99999)
         amount = request.form['amount']
         description = request.form['description']
         category_name = request.form['category']
@@ -90,8 +89,8 @@ def add_expense():
 
             category_id = category_row['id']
             data.execute(
-                "INSERT INTO expenses (id, amount, description, category_id, expense_date, created_at) VALUES (?, ?, ?, ?, ?, ?)",
-                (id, amount, description, category_id, expense_date, created_at)
+                "INSERT INTO expenses (amount, description, category_id, expense_date, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+                (amount, description, category_id, expense_date, created_at)
             )
             data.commit()
             flash(f"{description} added to expenses", category="success")

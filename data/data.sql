@@ -1,18 +1,29 @@
 DROP TABLE IF EXISTS expenses;
 DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    email TEXT NOT NULL
+);
+
 CREATE TABLE categories (
     id INTEGER PRIMARY KEY,
     name TEXT NOT NULL
 );
 
 CREATE TABLE expenses (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     amount DECIMAL(10,2) NOT NULL,
     description TEXT NOT NULL,
     category_id INTEGER,
     expense_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (category_id) REFERENCES categories(id)
+    user_id INTEGER,
+    FOREIGN KEY (category_id) REFERENCES categories(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 INSERT INTO categories VALUES (1, 'Food');
