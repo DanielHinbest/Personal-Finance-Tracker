@@ -166,4 +166,5 @@ def reports():
     return render_template('reports.html', expenses=expenses, categories=categories, search_query=search_query, selected_category=selected_category, start_date=start_date, end_date=end_date)
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0')
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)
