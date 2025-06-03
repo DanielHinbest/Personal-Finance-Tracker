@@ -53,6 +53,11 @@ def index():
 
 @app.route('/add_expense', methods=['GET', 'POST'])
 def add_expense():
+    try:
+        data = db.get_db()
+        categories = data.execute("SELECT * FROM categories").fetchall()
+    except Exception as e:
+        flash(f"Database error: {str(e)}", category="danger")
     if request.method == 'POST':
         id = random.randint(10000, 99999)
         amount = request.form['amount']
@@ -93,7 +98,8 @@ def add_expense():
             return redirect(url_for('index'))
         except Exception as e:
             flash(f"Database error: {str(e)}", category="danger")
-    return render_template('add_expense.html')
+
+    return render_template('add_expense.html', categories=categories)
 
 @app.route('/delete/<int:expense_id>', methods=['POST'])
 def delete_expense(expense_id):
@@ -108,21 +114,46 @@ def delete_expense(expense_id):
             flash(f"Database error: {str(e)}", category="danger")
     return redirect(url_for('index'))
 
-@app.route('/reports')
+@app.route('/reports', methods=['GET'])
 def reports():
     data = db.get_db()
     error = None
     expenses = None
+    categories = []
+
+    search_query = request.args.get('q', '').strip()
+    selected_category = request.args.get('category', '').strip()
 
     if error is None:
         try:
-            expenses = data.execute("SELECT * FROM expenses, categories WHERE category_id=categories.id ORDER BY expense_date DESC").fetchall()
             categories = data.execute("SELECT * FROM categories").fetchall()
+
+            search_sql = """
+                SELECT expenses.*, categories.name as category_name
+                FROM expenses 
+                JOIN categories ON expenses.category_id = categories.id
+                WHERE 1=1
+            """
+            params = []
+
+            if search_query:
+                search_sql += " AND (expenses.description LIKE ? OR categories.name LIKE ?)"
+                params += [f"%{search_query}%", f"%{search_query}%"]
+
+            if selected_category:
+                search_sql += "AND categories.name = ?"
+                params.append(selected_category)
+
+            search_sql += " ORDER BY expense_date DESC"
+
+            expenses = data.execute(search_sql, params).fetchall()
         except:
             error = "Database error"
+            expenses = []
+            categories = []
 
     flash(error)
-    return render_template('reports.html', expenses=expenses, categories=categories)
+    return render_template('reports.html', expenses=expenses, categories=categories, search_query=search_query, selected_category=selected_category)
 
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0')

@@ -17,15 +17,9 @@
         <label for="category">Category</label>
         <select id="category" name="category" class="form-control" required>
             <option value="">Select a category</option>
-            <option value="Food">🍕 Food</option>
-            <option value="Transportation">🚗 Transportation</option>
-            <option value="Entertainment">🎬 Entertainment</option>
-            <option value="Utilities">⚡ Utilities</option>
-            <option value="Healthcare">🏥 Healthcare</option>
-            <option value="Shopping">🛍️ Shopping</option>
-            <option value="Education">📚 Education</option>
-            <option value="Travel">✈️ Travel</option>
-            <option value="Other">📦 Other</option>
+            {% for cat in categories %}
+                <option value="{{ cat.name }}" {% if selected_category %}selected{% endif %}>{{ cat.name }}</option>
+            {% endfor %}
         </select>
 
         <label for="expense_date">Date</label>

@@ -5,20 +5,7 @@
 
 {% block content %}
 <div class="reports-container">
-    <!-- Reports Header with Date Range -->
-    <div class="reports-header">
-        <div class="date-range-picker">
-            <div class="date-input-group">
-                <label for="start-date">From</label>
-                <input type="date" id="start-date" name="start-date">
-            </div>
-            <div class="date-input-group">
-                <label for="end-date">To</label>
-                <input type="date" id="end-date" name="end-date">
-            </div>
-            <button class="btn-search">Update Report</button>
-        </div>
-    </div>
+
 
     <!-- Total Summary -->
     {% if total_amount %}
@@ -42,26 +29,36 @@
 
     <!-- Search and Filter -->
     <div class="search-filter-container">
-        <div class="search-group">
-            <label for="search">Search Expenses</label>
-            <input type="text" class="form-control" id="search" placeholder="Search by description...">
+        <!-- Reports Header with Date Range -->
+        <div class="reports-header">
+            <div class="date-range-picker">
+                <div class="date-input-group">
+                    <label for="start-date">From</label>
+                    <input type="date" id="start-date" name="start-date">
+                </div>
+                <div class="date-input-group">
+                    <label for="end-date">To</label>
+                    <input type="date" id="end-date" name="end-date">
+                </div>
+                <button class="btn-search">Update Report</button>
+            </div>
         </div>
-        <div class="filter-group">
-            <label for="category-filter">Filter by Category</label>
-            <select id="category-filter" class="form-control">
-                <option value="">All Categories</option>
-                <option value="Food">Food</option>
-                <option value="Transportation">Transportation</option>
-                <option value="Entertainment">Entertainment</option>
-                <option value="Utilities">Utilities</option>
-                <option value="Healthcare">Healthcare</option>
-                <option value="Shopping">Shopping</option>
-                <option value="Education">Education</option>
-                <option value="Travel">Travel</option>
-                <option value="Other">Other</option>
-            </select>
-        </div>
-        <button class="btn-search">Apply Filter</button>
+        <form method="GET" action="{{ url_for('reports') }}">
+            <div class="search-group">
+                <label for="search">Search Expenses</label>
+                <input type="text" class="form-control" name="q" id="search" value="{{ search_query }}"placeholder="Search by description...">
+            </div>
+            <div class="filter-group">
+                <label for="category-filter">Filter by Category</label>
+                <select id="category-filter" name="category" class="form-control">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.name }}" {% if selected_category %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button class="btn-search">Apply Filter</button>
+        </form>
     </div>
 
     <!-- Expenses Table -->
