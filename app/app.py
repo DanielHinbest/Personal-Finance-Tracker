@@ -15,16 +15,41 @@ def index():
     data = db.get_db()
     error = None
     expenses = None
+    total = None
+    monthly_total = None
+    weekly_total = None
+    now = datetime.datetime.now()
+    current_year = now.year
+    current_month = now.month
+    current_week = now.strftime("%W")
 
     if error is None:
         try:
-            expenses = data.execute("SELECT * FROM expenses").fetchall()
+            expenses = data.execute("SELECT * FROM expenses ORDER BY expense_date DESC").fetchall()
+            total = data.execute("SELECT SUM(amount) FROM expenses").fetchone()[0] or 0
+            total = f"{total:.2f}"
+
+            monthly_total = data.execute("""
+                                         SELECT SUM(amount) 
+                                         FROM expenses 
+                                         WHERE strftime('%Y', expense_date) = ? 
+                                           AND strftime('%m', expense_date) = ?
+                                             """, (str(current_year), f"{current_month:02d}")).fetchone()[0]
+            monthly_total = f"{monthly_total:.2f}"
+
+            weekly_total = data.execute("""
+                                        SELECT SUM(amount)
+                                        FROM expenses
+                                        WHERE strftime('%Y', expense_date) = ?
+                                          AND strftime('%W', expense_date) = ?
+                                        """, (str(current_year), current_week)).fetchone()[0]
+            weekly_total = f"{weekly_total:.2f}"
         except:
             error = "Database error"
 
     flash(error)
 
-    return render_template('index.html', expenses=expenses)
+    return render_template('index.html', expenses=expenses, total_expenses=total, monthly_total=monthly_total, weekly_total=weekly_total)
 
 @app.route('/add_expense', methods=['GET', 'POST'])
 def add_expense():
@@ -70,6 +95,19 @@ def add_expense():
             flash(f"Database error: {str(e)}", category="danger")
     return render_template('add_expense.html')
 
+@app.route('/delete/<int:expense_id>', methods=['POST'])
+def delete_expense(expense_id):
+    if request.method == 'POST':
+        data = db.get_db()
+        try:
+            data.execute("DELETE FROM expenses WHERE id = ?", (expense_id,))
+            data.commit()
+            flash("Expense deleted", category="success")
+            return redirect(url_for('index'))
+        except Exception as e:
+            flash(f"Database error: {str(e)}", category="danger")
+    return redirect(url_for('index'))
+
 @app.route('/reports')
 def reports():
     data = db.get_db()
@@ -78,7 +116,7 @@ def reports():
 
     if error is None:
         try:
-            expenses = data.execute("SELECT * FROM expenses, categories WHERE category_id=categories.id").fetchall()
+            expenses = data.execute("SELECT * FROM expenses, categories WHERE category_id=categories.id ORDER BY expense_date DESC").fetchall()
             categories = data.execute("SELECT * FROM categories").fetchall()
         except:
             error = "Database error"

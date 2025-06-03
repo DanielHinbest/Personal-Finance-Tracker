@@ -1,4 +1,3 @@
-<!-- Updated index.html - Home page with expense list -->
 {% extends 'base.html' %}
 {% block header %}
     <h1>{% block title %}Personal Finance Dashboard{% endblock %}</h1>
@@ -43,6 +42,11 @@
                 </div>
                 <div class="expense-amount">
                     -${{ "%.2f"|format(expense.amount) }}
+                </div>
+                <div class="expense-actions">
+                    <form method="POST" action="{{ url_for('delete_expense', expense_id=expense.id) }}" onsubmit="return confirm('Are you sure you want to delete this expense?');">
+                        <button type="submit" class="delete-btn" title="Delete expense">🗑️</button>
+                    </form>
                 </div>
             </div>
             {% endfor %}
